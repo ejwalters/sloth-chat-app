@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import CreateIcon from "@material-ui/icons/Create";
 import SidebarOption from './SidebarOption';
+import SidebarFeature from './SidebarFeature';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -33,13 +34,12 @@ function Sidebar() {
                 </SidebarInfo>
                 <CreateIcon />
             </SidebarHeader>
-            <SidebarOption Icon={InsertCommentIcon} title="Threads" />
-            <SidebarOption Icon={InboxIcon} title="Mentions & Reactions" />
-            <SidebarOption Icon={DraftsIcon} title="Start Video Call" />
-            <SidebarOption Icon={BookmarkBorderIcon} title="Start Audio Call" />
-            <SidebarOption Icon={PeopleAltIcon} title="Open Support Ticket" />
-            <SidebarOption Icon={AppsIcon} title="Integrations" />
-            <SidebarOption Icon={FileCopyIcon} title="File Browser" />
+            <SidebarFeature Icon={InsertCommentIcon} title="Threads" />
+            <SidebarFeature Icon={InboxIcon} title="Mentions & Reactions" />
+            <SidebarFeature Icon={DraftsIcon} title="Start Video Call" />
+            <SidebarFeature Icon={BookmarkBorderIcon} title="Start Audio Call" />
+            <SidebarFeature Icon={PeopleAltIcon} title="Open Support Ticket" />
+            <SidebarFeature Icon={AppsIcon} title="Add Integration" />
 
 
             <hr />

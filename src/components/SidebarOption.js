@@ -35,10 +35,6 @@ function SidebarOption({ Icon, title, addChannelOption, id }) {
             analytics.track('Channel Viewed', {
                 name: title
             });
-        } else {
-            analytics.track('Feature Clicked', {
-                name: title
-            });
         }
     };
 

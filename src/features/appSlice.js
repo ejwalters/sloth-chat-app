@@ -16,11 +16,16 @@ export const appSlice = createSlice({
     enterRoom: (state, action) => {
       state.roomId = action.payload.roomId;
     },
+    toggleForm: (state) => {
+      state.showForm = !state.showForm;
+    },
   },
 });
 
 export const { enterRoom } = appSlice.actions;
+export const { toggleForm } = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
+export const selectShowForm = (state) => state.app.showForm;
 
 export default appSlice.reducer;
