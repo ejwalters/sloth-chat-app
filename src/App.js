@@ -17,6 +17,8 @@ import { auth } from "./firebase";
 import Spinner from "react-spinkit";
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import firebase from 'firebase/compat/app';
+import SupportTicket from './components/SupportTicket'; // adjust the path according to your file structure
+
 
 
 
@@ -66,6 +68,7 @@ function App() {
               <Sidebar />
               <Routes>
                 <Route path="/" element={<Chat />} />
+                <Route path="/support" element={<SupportTicket />} />
               </Routes>
             </AppBody>
           </>

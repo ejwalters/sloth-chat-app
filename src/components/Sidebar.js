@@ -17,6 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useCollection } from "react-firebase-hooks/firestore";
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
 
@@ -38,7 +39,9 @@ function Sidebar() {
             <SidebarFeature Icon={InboxIcon} title="Mentions & Reactions" />
             <SidebarFeature Icon={DraftsIcon} title="Start Video Call" />
             <SidebarFeature Icon={BookmarkBorderIcon} title="Start Audio Call" />
-            <SidebarFeature Icon={PeopleAltIcon} title="Open Support Ticket" />
+            <Link to="/support">
+                <SidebarFeature Icon={PeopleAltIcon} title="Open Support Ticket" />
+            </Link>
             <SidebarFeature Icon={AppsIcon} title="Add Integration" />
 
 
@@ -49,7 +52,8 @@ function Sidebar() {
 
 
             {channels?.docs.map(doc => (
-                <SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+                <Link to="/"><SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+                </Link>
             ))}
 
 
