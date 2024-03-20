@@ -40,7 +40,7 @@ function Sidebar() {
             <SidebarOption Icon={PeopleAltIcon} title="Open Support Ticket" />
             <SidebarOption Icon={AppsIcon} title="Integrations" />
             <SidebarOption Icon={FileCopyIcon} title="File Browser" />
-            <SidebarOption Icon={ExpandLessIcon} title="Show Less" />
+
 
             <hr />
             <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
