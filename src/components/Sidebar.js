@@ -39,9 +39,9 @@ function Sidebar() {
             <SidebarFeature Icon={InboxIcon} title="Mentions & Reactions" />
             <SidebarFeature Icon={DraftsIcon} title="Start Video Call" />
             <SidebarFeature Icon={BookmarkBorderIcon} title="Start Audio Call" />
-            <Link to="/support">
+            <StyledLink to="/support">
                 <SidebarFeature Icon={PeopleAltIcon} title="Open Support Ticket" />
-            </Link>
+            </StyledLink>
             <SidebarFeature Icon={AppsIcon} title="Add Integration" />
 
 
@@ -62,6 +62,16 @@ function Sidebar() {
 }
 
 export default Sidebar;
+
+const StyledLink = styled(Link)`
+  outline: none;
+  text-decoration: none;
+  color: inherit; // or any color you want
+
+  &:active {
+    color: inherit; // or any color you want
+  }
+`;
 
 const SidebarContainer = styled.div`
     background-color: var(--sloth-chat-color);

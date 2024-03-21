@@ -12,10 +12,7 @@ function SidebarFeature({ Icon, title }) {
     const trackFeature = () => {
         if (title === 'Open Support Ticket') {
             console.log('Feature clicked - ', title);
-            analytics.track('Support Ticket Opened', {
-                description: 'User opened a support ticket',
-                severity: 'low',
-                priority: 'low'
+            analytics.track('Support Ticket Clicked', {
             });
         } else if (title === 'Add Integration') {
             analytics.track('Integration Added', {
@@ -40,7 +37,7 @@ function SidebarFeature({ Icon, title }) {
 export default SidebarFeature
 
 const SidebarFeatureContainer = styled.div`
-        color: white;
+    color: white;
     display: flex;
     font-size: 12px;
     align-items: center;

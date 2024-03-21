@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import Select from 'react-select';
+import { v4 as uuidv4 } from 'uuid';
+
 
 function SupportTicket() {
   const [title, setTitle] = useState('');
@@ -9,6 +11,8 @@ function SupportTicket() {
   const [severity, setSeverity] = useState('');
   const [priority, setPriority] = useState('');
   const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   const options = [
     { value: 'low', label: 'Low' },
@@ -18,17 +22,33 @@ function SupportTicket() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Validate inputs
+    if (!title || !description || !severity || !priority) {
+      alert('Please complete all fields before submitting.');
+      return;
+    }
+    const id = uuidv4();
     // Handle form submission here
     analytics.track('Support Ticket Submitted', {
+      id: id,
       title: title,
       description: description,
-      severity: severity,
-      priority: priority
+      severity: severity ? severity.value : '',
+      priority: priority ? priority.value : ''
     });
+
+    setTitle('');
+    setDescription('');
+    setSeverity(null);
+    setPriority(null);
+
+    setIsSubmitted(true);
   };
 
   return (
     <SupportFormContainer>
+      {isSubmitted && <StyledSuccessMessage>Your ticket was submitted successfully!</StyledSuccessMessage>}
       <StyledHeader>Open a Support Ticket</StyledHeader>
       <Form onSubmit={handleSubmit}>
         <StyledLabel>
@@ -42,8 +62,8 @@ function SupportTicket() {
         <Label>
           Severity:
           <StyledSelect
-            value={options.find(option => option.value === severity)}
-            onChange={option => setSeverity(option.value)}
+            value={severity}
+            onChange={option => setSeverity(option || null)}
             options={options}
             placeholder="Select severity"
           />
@@ -51,8 +71,8 @@ function SupportTicket() {
         <Label>
           Priority:
           <StyledSelect
-            value={options.find(option => option.value === priority)}
-            onChange={option => setPriority(option.value)}
+            value={priority}
+            onChange={option => setPriority(option || null)}
             options={options}
             placeholder="Select priority"
           />
@@ -62,6 +82,18 @@ function SupportTicket() {
     </SupportFormContainer>
   );
 }
+
+const StyledSuccessMessage = styled.p`
+  color: green;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #d4edda;
+  width: 300px;
+  outline: 1px solid black;
+  border-radius: 5px;
+  font-weight: 600;
+  text-align: center;
+`;
 
 const StyledHeader = styled.h1`
   margin-bottom: 20px;
