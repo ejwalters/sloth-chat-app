@@ -6,12 +6,10 @@ import SidebarOption from './SidebarOption';
 import SidebarFeature from './SidebarFeature';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
 import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import BookmarkBorderIcon from '@material-ui/icons/Bookmark';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import PhoneIcon from '@material-ui/icons/Phone';
 import AppsIcon from '@material-ui/icons/Apps';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -37,10 +35,10 @@ function Sidebar() {
             </SidebarHeader>
             <SidebarFeature Icon={InsertCommentIcon} title="Threads" />
             <SidebarFeature Icon={InboxIcon} title="Mentions & Reactions" />
-            <SidebarFeature Icon={DraftsIcon} title="Start Video Call" />
-            <SidebarFeature Icon={BookmarkBorderIcon} title="Start Audio Call" />
+            <SidebarFeature Icon={VideocamIcon} title="Start Video Call" />
+            <SidebarFeature Icon={PhoneIcon} title="Start Audio Call" />
             <StyledLink to="/support">
-                <SidebarFeature Icon={PeopleAltIcon} title="Open Support Ticket" />
+                <SidebarFeature Icon={ContactSupportIcon} title="Open Support Ticket" />
             </StyledLink>
             <SidebarFeature Icon={AppsIcon} title="Add Integration" />
 
@@ -52,8 +50,8 @@ function Sidebar() {
 
 
             {channels?.docs.map(doc => (
-                <Link to="/"><SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
-                </Link>
+                <StyledLink to="/"><SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+                </StyledLink>
             ))}
 
 
