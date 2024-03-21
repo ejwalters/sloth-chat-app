@@ -4,19 +4,26 @@ import { Avatar } from "@material-ui/core";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import SearchIcon from "@material-ui/icons/Search";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { AnalyticsBrowser } from "@segment/analytics-next";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Modal from '@material-ui/core/Modal';
 import { auth } from "../firebase";
 import Button from '@material-ui/core/Button';
+import { darken } from 'polished';
 
 
 function Header() {
 
     const [user] = useAuthState(auth);
     const [open, setOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState('business');
+    const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
 
     function handleUpgradeClick() {
         console.log('Upgrade Subscription Clicked');
+        analytics.track('Upgrade Clicked', {
+        });
         setOpen(true);
     }
 
@@ -24,8 +31,13 @@ function Header() {
         setOpen(false);
     }
 
-    function handleInquireClick() {
-        // Handle the inquire click here
+    function handleInquireClick(planType) {
+        return () => {
+            console.log('Inquire Clicked - ', planType);
+            analytics.track('Inquire Clicked', {
+                planType: planType
+            });
+        }
     }
 
     return <HeaderContainer>
@@ -54,20 +66,32 @@ function Header() {
         {/* Upgrade Modal */}
         <StyledModal open={open} onClose={handleClose}>
             <ModalContent>
-                <Plan>
+                <Plan selected={selectedPlan === 'individual'} onClick={() => setSelectedPlan('individual')}>
                     <h2>Individual Plan</h2>
-                    <p>Feature details...</p>
-                    <Button onClick={handleInquireClick}>Inquire</Button>
+                    <ul>
+                        <ListItem><CheckCircleIcon />Free Forever</ListItem>
+                        <ListItem><CheckCircleIcon />5 Channels</ListItem>
+                        <ListItem><CheckCircleIcon />10 Users</ListItem>
+                    </ul>
+                    <InquireButton color="lightblue" onClick={handleInquireClick('individual')}>Learn More</InquireButton>
                 </Plan>
-                <Plan>
+                <Plan selected={selectedPlan === 'business'} onClick={() => setSelectedPlan('business')}>
                     <h2>Business Plan</h2>
-                    <p>Feature details...</p>
-                    <Button onClick={handleInquireClick}>Inquire</Button>
+                    <ul>
+                        <ListItem><CheckCircleIcon />20 Channels</ListItem>
+                        <ListItem><CheckCircleIcon />5 Integrations</ListItem>
+                        <ListItem><CheckCircleIcon />20 Users</ListItem>
+                    </ul>
+                    <InquireButton color="lightgreen" onClick={handleInquireClick('business')}>Learn More</InquireButton>
                 </Plan>
-                <Plan>
+                <Plan selected={selectedPlan === 'enterprise'} onClick={() => setSelectedPlan('enterprise')}>
                     <h2>Enterprise Plan</h2>
-                    <p>Feature details...</p>
-                    <Button onClick={handleInquireClick}>Inquire</Button>
+                    <ul>
+                        <ListItem><CheckCircleIcon />Unlimited Channels</ListItem>
+                        <ListItem><CheckCircleIcon />Unlimited Integrations</ListItem>
+                        <ListItem><CheckCircleIcon />Unlimited Users</ListItem>
+                    </ul>
+                    <InquireButton color="lightcoral" onClick={handleInquireClick('enterprise')}>Learn More</InquireButton>
                 </Plan>
             </ModalContent>
         </StyledModal>
@@ -76,6 +100,26 @@ function Header() {
 }
 
 export default Header
+
+const InquireButton = styled(Button)`
+  background-color: ${props => props.color || 'lightgreen'} !important;
+  margin-top: 40px !important;
+
+  &:hover {
+    background-color: ${props => darken(0.2, props.color || 'lightgreen')} !important;
+  }
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .MuiSvgIcon-root {
+    color: lightgreen;
+    margin-right: 10px;
+  }
+`;
 
 const StyledModal = styled(Modal)`
   display: flex;
@@ -88,8 +132,26 @@ const Plan = styled.div`
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 20px;
-  margin: 10px;
+  margin: 20px;
   text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+
+  transition: transform 0.3s ease;
+  transform: perspective(500px) translateZ(0);
+
+  ${props => props.selected && `
+    border: 2px solid lightgreen;
+    box-shadow: 0 0 10px lightgreen;
+    transform: perspective(500px) translateZ(20px) scale(1.05);
+  `}
+
+  ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin-top: 20px;
+  }
 `;
 
 const ModalContent = styled.div`
