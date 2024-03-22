@@ -5,21 +5,24 @@ import { AnalyticsBrowser } from "@segment/analytics-next";
 
 function SidebarFeature({ Icon, title, onClick }) {
     const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
+    console.log('Feature loaded - ', title);
 
     const trackFeature = () => {
-        if (title === 'Open Support Ticket') {
-            console.log('Feature clicked - ', title);
-            analytics.track('Support Ticket Clicked', {
-            });
-        } else if (title === 'Add Integration') {
-            analytics.track('Add Integration Clicked', {
-            });
-            //This is needed to call the handleAddIntegration function from Sidebar.js
-            onClick && onClick();
-        } else {
-            analytics.track('Feature Clicked', {
-                name: title
-            });
+        switch (title) {
+            case 'Open Support Ticket':
+                console.log('Feature clicked - ', title);
+                analytics.track('Support Ticket Clicked', {});
+                break;
+            case 'Add Integration':
+                analytics.track('Add Integration Clicked', {});
+                onClick && onClick();
+                break;
+            case 'Segment Profile API':
+                onClick && onClick();
+                break;
+            default:
+                analytics.track('Feature Clicked', { name: title });
+                break;
         }
     }
 

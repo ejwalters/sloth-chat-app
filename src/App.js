@@ -7,6 +7,8 @@ import {
   Routes,
   Link
 } from "react-router-dom";
+import { createPortal } from 'react-dom';
+
 
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -17,10 +19,7 @@ import { auth } from "./firebase";
 import Spinner from "react-spinkit";
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import firebase from 'firebase/compat/app';
-import SupportTicket from './components/SupportTicket'; // adjust the path according to your file structure
-
-
-
+import SupportTicket from './components/SupportTicket';
 
 function App() {
 
@@ -77,6 +76,8 @@ function App() {
     </div >
   );
 }
+
+
 
 const AppBody = styled.div`
   display: flex;

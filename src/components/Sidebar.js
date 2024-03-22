@@ -6,7 +6,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import SidebarOption from './SidebarOption';
 import SidebarFeature from './SidebarFeature';
 import InsertCommentIcon from '@material-ui/icons/InsertComment';
-import InboxIcon from '@material-ui/icons/Inbox';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AppsIcon from '@material-ui/icons/Apps';
@@ -29,6 +29,7 @@ import githubImage from '../images/github.png';
 function Sidebar() {
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [segmentProfileModalOpen, setSegmentProfileModalOpen] = useState(false);
     const integrations = [
         {
             name: 'Salesforce',
@@ -62,6 +63,11 @@ function Sidebar() {
         setModalIsOpen(true);
     };
 
+    const handleProfileAPIClick = () => {
+        console.log('OPEN PROFILE API OPEN');
+        setSegmentProfileModalOpen(true);
+    };
+
     const [channels, loading, error] = useCollection(db.collection("rooms"));
     const [user] = useAuthState(auth);
     return (
@@ -76,8 +82,7 @@ function Sidebar() {
                 </SidebarInfo>
                 <CreateIcon />
             </SidebarHeader>
-            <SidebarFeature Icon={InsertCommentIcon} title="Threads" />
-            <SidebarFeature Icon={InboxIcon} title="Mentions & Reactions" />
+            <SidebarFeature Icon={AccountCircleIcon} title="Segment Profile API" onClick={handleProfileAPIClick} />
             <SidebarFeature Icon={VideocamIcon} title="Start Video Call" />
             <SidebarFeature Icon={PhoneIcon} title="Start Audio Call" />
             <StyledLink to="/support">
@@ -120,6 +125,15 @@ function Sidebar() {
                             </IntegrationStatus>
                         </IntegrationRow>
                     ))}
+                </ModalContent>
+            </StyledModal>
+
+            <StyledModal
+                open={segmentProfileModalOpen}
+                onClose={() => setSegmentProfileModalOpen(false)}
+            >
+                <ModalContent>
+                    <h1>Segment Profile API</h1>
                 </ModalContent>
             </StyledModal>
 
