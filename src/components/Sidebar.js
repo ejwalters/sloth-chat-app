@@ -26,8 +26,9 @@ import gdriveImage from '../images/gdrive.png';
 import gcalImage from '../images/gcal.png';
 import airtableImage from '../images/airtable.png';
 import githubImage from '../images/github.png';
-function Sidebar() {
+function Sidebar({ traits }) {
 
+    console.log('SIDEBAR TRAITS: ', traits);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [segmentProfileModalOpen, setSegmentProfileModalOpen] = useState(false);
     const integrations = [
@@ -133,7 +134,18 @@ function Sidebar() {
                 onClose={() => setSegmentProfileModalOpen(false)}
             >
                 <ModalContent>
-                    <h1>Segment Profile API</h1>
+                    {traits && traits.name && <h2>{traits.name}</h2>}
+                    <table>
+                        <tbody>
+                            { /* Check if traits exist and turn traits into array and loop */}
+                            {traits && Object.entries(traits).map(([key, value], index) => (
+                                <tr key={index}>
+                                    <td>{key}</td>
+                                    <td>{value}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </ModalContent>
             </StyledModal>
 

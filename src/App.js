@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import './App.css';
 import {
@@ -25,6 +25,9 @@ function App() {
 
   const [user, loading] = useAuthState(auth);
   const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
+  const [data, setData] = useState(null);
+  const [traits, setTraits] = useState([]);
+
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -40,6 +43,19 @@ function App() {
 
     return () => unsubscribe(); // Unsubscribe from the auth state listener when component unmounts
   }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/data')
+      .then(response => response.json())
+      .then(data => {
+        /* Setting data from the returned Profile API data */
+        setData(data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+
+
 
   if (loading) {
     return (
@@ -64,7 +80,8 @@ function App() {
           <>
             <Header />
             <AppBody>
-              <Sidebar />
+              { /* Sending profile data from API to Sidebar for Profile API widget */}
+              <Sidebar traits={data} />
               <Routes>
                 <Route path="/" element={<Chat />} />
                 <Route path="/support" element={<SupportTicket />} />
