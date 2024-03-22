@@ -29,6 +29,27 @@ app.get('/api/data', async (req, res) => {
     res.end();
 });
 
+app.get('/api/events', async (req, res) => {
+    let new_anon_id = (anon_id.replace(/['"]+/g, ''));
+    let api_url = 'https://profiles.segment.com/v1/spaces/' + PersonasSpace + '/collections/users/profiles/anonymous_id:' + new_anon_id + '/events';
+    console.log("API URL -- ", api_url);
+    var hash = btoa(profileApiToken + ':');
+    const headers = {
+        'Authorization': 'Basic ' + hash,
+        'Content-Type': 'application/json',
+    };
+
+    try {
+        const response = await axios.get(api_url, { headers });
+        res.json(response.data);
+        //console.log("Events -- ", response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while trying to fetch data' });
+    }
+    res.end();
+});
+
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

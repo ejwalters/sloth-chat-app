@@ -26,6 +26,7 @@ function App() {
   const [user, loading] = useAuthState(auth);
   const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
   const [data, setData] = useState(null);
+  const [events, setEvents] = useState(null);
   const [traits, setTraits] = useState([]);
 
 
@@ -50,6 +51,23 @@ function App() {
       .then(data => {
         /* Setting data from the returned Profile API data */
         setData(data);
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/events')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(data => {
+        if (data) {
+          setEvents(JSON.parse(data));
+          console.log('Events - ', data);
+        }
       })
       .catch(error => console.error(error));
   }, []);

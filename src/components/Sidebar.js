@@ -13,6 +13,8 @@ import AppsIcon from '@material-ui/icons/Apps';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
+import { Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
+//import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
 import CheckIcon from '@material-ui/icons/Check';
 import { withStyles } from '@material-ui/core/styles';
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -31,6 +33,7 @@ function Sidebar({ traits }) {
     console.log('SIDEBAR TRAITS: ', traits);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [segmentProfileModalOpen, setSegmentProfileModalOpen] = useState(false);
+    const [isTableCollapsed, setIsTableCollapsed] = useState(true);
     const integrations = [
         {
             name: 'Salesforce',
@@ -134,18 +137,31 @@ function Sidebar({ traits }) {
                 onClose={() => setSegmentProfileModalOpen(false)}
             >
                 <ModalContent>
-                    {traits && traits.name && <h2>{traits.name}</h2>}
-                    <table>
-                        <tbody>
-                            { /* Check if traits exist and turn traits into array and loop */}
-                            {traits && Object.entries(traits).map(([key, value], index) => (
-                                <tr key={index}>
-                                    <td>{key}</td>
-                                    <td>{value}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    {traits && traits.name && <div>{traits.name}</div>}
+                    <IconButton onClick={() => setIsTableCollapsed(!isTableCollapsed)}>
+                        <ExpandMoreIcon />
+                        Traits
+                    </IconButton>
+                    <TableContainer component={Paper}>
+                        <Collapse in={!isTableCollapsed}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Trait Name</TableCell>
+                                        <TableCell>Value</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {traits && Object.entries(traits).map(([key, value], index) => (
+                                        <StyledTableRow key={index}>
+                                            <BoldTableCell>{key}</BoldTableCell>
+                                            <TableCell>{value}</TableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Collapse>
+                    </TableContainer>
                 </ModalContent>
             </StyledModal>
 
@@ -155,6 +171,21 @@ function Sidebar({ traits }) {
 }
 
 export default Sidebar;
+
+const BoldTableCell = styled(TableCell)`
+  font-weight: bold;
+`;
+
+const StyledTableRow = withStyles((theme) => ({
+    root: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.action.selected,
+        },
+    },
+}))(TableRow);
 
 const RedTooltip = withStyles((theme) => ({
     tooltip: {
@@ -225,6 +256,12 @@ const ModalContent = styled.div`
   outline: none;
   padding: 20px;
   border-radius: 5px;
+
+  > div {
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
 `;
 
 const StyledLink = styled(Link)`
