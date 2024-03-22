@@ -1,12 +1,9 @@
 import React from 'react'
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { enterRoom } from "../features/appSlice";
-
-import { db } from '../firebase';
 import { AnalyticsBrowser } from "@segment/analytics-next";
 
-function SidebarFeature({ Icon, title }) {
+
+function SidebarFeature({ Icon, title, onClick }) {
     const analytics = AnalyticsBrowser.load({ writeKey: 'TD0oABfXUMo4C1p01WUgvXL3atnHCaWR' });
 
     const trackFeature = () => {
@@ -15,9 +12,10 @@ function SidebarFeature({ Icon, title }) {
             analytics.track('Support Ticket Clicked', {
             });
         } else if (title === 'Add Integration') {
-            analytics.track('Integration Added', {
-                description: 'User added'
+            analytics.track('Add Integration Clicked', {
             });
+            //This is needed to call the handleAddIntegration function from Sidebar.js
+            onClick && onClick();
         } else {
             analytics.track('Feature Clicked', {
                 name: title
@@ -29,7 +27,6 @@ function SidebarFeature({ Icon, title }) {
         <SidebarFeatureContainer onClick={trackFeature}>
             {Icon && <Icon fontSize='small' style={{ padding: 10 }} />}
             <h3>{title}</h3>
-
         </SidebarFeatureContainer>
     )
 }
