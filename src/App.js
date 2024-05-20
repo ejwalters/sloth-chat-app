@@ -37,6 +37,19 @@ function App() {
           name: user.displayName,
           email: user.email
         });
+
+        fetch('http://localhost:3001/api/data', {
+          headers: {
+            'Content-Type': 'application/json',
+            'User': JSON.stringify(user.email), // include the user information in the headers
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            /* Setting data from the returned Profile API data */
+            setData(data);
+          })
+          .catch(error => console.error(error));
       } else {
         // User is signed out
       }
@@ -45,15 +58,7 @@ function App() {
     return () => unsubscribe(); // Unsubscribe from the auth state listener when component unmounts
   }, []);
 
-  useEffect(() => {
-    fetch('http://localhost:3001/api/data')
-      .then(response => response.json())
-      .then(data => {
-        /* Setting data from the returned Profile API data */
-        setData(data);
-      })
-      .catch(error => console.error(error));
-  }, []);
+
 
   useEffect(() => {
     fetch('http://localhost:3001/api/events')
@@ -66,7 +71,7 @@ function App() {
       .then(data => {
         if (data) {
           setEvents(JSON.parse(data));
-          console.log('Events - ', data);
+          console.log('Events - ', JSON.parse(data));
         }
       })
       .catch(error => console.error(error));
@@ -99,7 +104,7 @@ function App() {
             <Header />
             <AppBody>
               { /* Sending profile data from API to Sidebar for Profile API widget */}
-              <Sidebar traits={data} />
+              <Sidebar traits={data} events={events} />
               <Routes>
                 <Route path="/" element={<Chat />} />
                 <Route path="/support" element={<SupportTicket />} />

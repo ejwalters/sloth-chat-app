@@ -2,22 +2,25 @@ const express = require('express');
 const app = express();
 const port = 3001;
 const axios = require('axios');
-var profileApiToken = "OnE2g7YLo4LqQBIKPUo5pcm73Ph7tIvJdAuy6__xZzaMKfMHmb6BSz9hO08hom4b4MpDcVKn3Gi0OKPy4gb4QsHz8_u8e7vwOsjk96yjiJfP5v2yqLqUjLk1bUltCR5G75jv2lLC9DABHccEE-5wl82dvvnSDCGe7P54GFNJ2gFD3vQPAp01nJ1_Dpjb1tQM7-kGOAqx8JxdeasC6o7dHFuIQ_Z5BfLif3b87TVHsmt0vHM0Uhf9XHqzBUavTJCSmu24kDnl_OwOX_O9lO5po8NDBZo=";
+var profileApiToken = "t9dcWS0b-6QN03Ru_aUKqbNeef1PTwf4PbOvmpDwQI0SWxOlry3fehPlEu96RMsxr2rvDUW_qLhkkFgedHcG41ArjpoNVbnDgvmSN29yl0_k1vuKNhQQ6B-wqMZpxdPvf-tM0KIk1xRRxvzMR5-Mxjfa0OHe1vLbtif4feslQmz1WNwZJFQgbjgPYwIgn6gUcbOhApCZRxZULEhGjsGx44nvdSsRn_oLzSLyDQ6hDHDhB_cMODo0Cq7H1BrPV1sexC2yXGk0elafjFU84cdxSEKK9lw=";
 var writeKey = "eznOJ1f1AE93h0xn2ErLOTWMhYFPq6gP";
-var PersonasSpace = "spa_guwfkaTcfqVerxoetnb6AS";
-const anon_id = "08482335-3061-4447-88a2-6f478a5ee814";
+var PersonasSpace = "spa_j6DSbfNS41FxuKXLfotDLZ";
+const anon_id = "a36e6c21-86f4-4489-998d-3fe3cd637edb";
 const cors = require('cors');
 
 app.use(cors());
 
 app.get('/api/data', async (req, res) => {
     let new_anon_id = (anon_id.replace(/['"]+/g, ''));
+    const user = JSON.parse(req.headers['user']); // parse the user information from the headers
+    console.log("USER -- ", user);
     let api_url = 'https://profiles.segment.com/v1/spaces/' + PersonasSpace + '/collections/users/profiles/anonymous_id:' + new_anon_id + '/traits?limit=200';
     var hash = btoa(profileApiToken + ':');
     const headers = {
         'Authorization': 'Basic ' + hash,
         'Content-Type': 'application/json',
     };
+    //console.log("API URL -- ", api_url);
 
     try {
         const response = await axios.get(api_url, { headers });
@@ -31,8 +34,8 @@ app.get('/api/data', async (req, res) => {
 
 app.get('/api/events', async (req, res) => {
     let new_anon_id = (anon_id.replace(/['"]+/g, ''));
-    let api_url = 'https://profiles.segment.com/v1/spaces/' + PersonasSpace + '/collections/users/profiles/anonymous_id:' + new_anon_id + '/events';
-    console.log("API URL -- ", api_url);
+    let api_url = 'https://profiles.segment.com/v1/spaces/' + PersonasSpace + '/collections/users/profiles/anonymous_id:' + new_anon_id + '/events?limit=10';
+    //console.log("API URL -- ", api_url);
     var hash = btoa(profileApiToken + ':');
     const headers = {
         'Authorization': 'Basic ' + hash,
@@ -41,8 +44,13 @@ app.get('/api/events', async (req, res) => {
 
     try {
         const response = await axios.get(api_url, { headers });
-        res.json(response.data);
-        //console.log("Events -- ", response.data);
+        const responseData = response.data;
+        //console.log("Response Data -- ", responseData.data);
+        res.json(responseData.data);
+
+        /* GET EVENT NAMES FROM RESPONSE DATA
+        const eventNames = responseData.data.map(record => record.event);
+        console.log("Event Names:", eventNames); */
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred while trying to fetch data' });

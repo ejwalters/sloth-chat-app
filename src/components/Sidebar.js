@@ -23,44 +23,14 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import sfdcImage from '../images/sfdc.png';
-import gdriveImage from '../images/gdrive.png';
-import gcalImage from '../images/gcal.png';
-import airtableImage from '../images/airtable.png';
-import githubImage from '../images/github.png';
-function Sidebar({ traits }) {
+import { integrations } from '../static/integrations';
 
-    console.log('SIDEBAR TRAITS: ', traits);
+function Sidebar({ traits, events }) {
+
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [segmentProfileModalOpen, setSegmentProfileModalOpen] = useState(false);
     const [isTableCollapsed, setIsTableCollapsed] = useState(true);
-    const integrations = [
-        {
-            name: 'Salesforce',
-            image: sfdcImage,
-            description: 'Access customer data and sales insights directly within Sloth Chat for real-time collaboration and faster decision-making.'
-        },
-        {
-            name: 'Google Drive',
-            image: gdriveImage,
-            description: 'Share and collaborate on documents, spreadsheets, and presentations within Sloth Chat channels, improving communication and productivity.'
-        },
-        {
-            name: 'Google Calendar',
-            image: gcalImage,
-            description: 'View and manage schedules, set reminders, and schedule meetings without leaving Sloth Chat, fostering better organization and coordination.'
-        },
-        {
-            name: 'Airtable',
-            image: airtableImage,
-            description: 'Organize and track projects, workflows, and tasks directly within Sloth Chat channels, improving transparency and collaboration.'
-        },
-        {
-            name: 'Github',
-            image: githubImage,
-            description: 'Receive real-time notifications, monitor code changes, and collaborate on projects seamlessly within Sloth Chat, facilitating smoother development workflows.'
-        },
-    ];
+    const [isEventsCollapsed, setIsEventsCollapsed] = useState(true);
 
     const handleAddIntegration = () => {
         console.log('OPEN MODAL');
@@ -110,7 +80,7 @@ function Sidebar({ traits }) {
             >
                 <ModalContent>
                     <IntegrationHeader>
-                        <h1>Integrations</h1>
+                        <h1 style={{ fontSize: '1em' }}>Integrations</h1>
                         <RedTooltip title="Your Business Plan only allows 5 integrations.">
                             <span>
                                 <Button variant="contained" disabled>
@@ -124,7 +94,7 @@ function Sidebar({ traits }) {
                             <IntegrationImage src={integration.image} alt={integration.name} />
                             <IntegrationDescription>{integration.description}</IntegrationDescription>
                             <IntegrationStatus>
-                                <CheckIcon />
+                                <CheckIcon style={{ fontSize: 20 }} />
                                 Enabled
                             </IntegrationStatus>
                         </IntegrationRow>
@@ -156,6 +126,35 @@ function Sidebar({ traits }) {
                                         <StyledTableRow key={index}>
                                             <BoldTableCell>{key}</BoldTableCell>
                                             <TableCell>{value}</TableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Collapse>
+                    </TableContainer>
+                    <IconButton onClick={() => setIsEventsCollapsed(!isEventsCollapsed)}>
+                        <ExpandMoreIcon />
+                        Events
+                    </IconButton>
+                    <TableContainer component={Paper}>
+                        <Collapse in={!isEventsCollapsed}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Event Name</TableCell>
+                                        <TableCell>Properties</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {events && events.map((event, index) => (
+                                        <StyledTableRow key={index}>
+                                            <BoldTableCell>{event.event}</BoldTableCell>
+                                            <TableCell>{Object.entries(event.properties).map(([key, value], i) => (
+                                                <div key={i}>
+                                                    <span style={{ fontWeight: 'bold' }}>{key}: </span>
+                                                    <span>{value}</span>
+                                                </div>
+                                            ))}</TableCell>
                                         </StyledTableRow>
                                     ))}
                                 </TableBody>
@@ -231,6 +230,7 @@ const IntegrationStatus = styled.div`
   display: flex;
   align-items: center;
   color: green;
+  font-size: small;
 `;
 
 
