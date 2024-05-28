@@ -37,7 +37,7 @@ function App() {
           name: user.displayName,
           email: user.email
         });
-
+        //Call server to fetch traits from Profile API
         fetch('http://localhost:3001/api/data', {
           headers: {
             'Content-Type': 'application/json',
@@ -61,6 +61,7 @@ function App() {
 
 
   useEffect(() => {
+    //Call server to fetch events from Profile API
     fetch('http://localhost:3001/api/events')
       .then(response => {
         if (!response.ok) {

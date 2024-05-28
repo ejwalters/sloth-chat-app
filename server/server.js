@@ -10,6 +10,7 @@ const cors = require('cors');
 
 app.use(cors());
 
+//Fetch Traits From Profile API
 app.get('/api/data', async (req, res) => {
     let new_anon_id = (anon_id.replace(/['"]+/g, ''));
     const user = JSON.parse(req.headers['user']); // parse the user information from the headers
@@ -20,7 +21,6 @@ app.get('/api/data', async (req, res) => {
         'Authorization': 'Basic ' + hash,
         'Content-Type': 'application/json',
     };
-    //console.log("API URL -- ", api_url);
 
     try {
         const response = await axios.get(api_url, { headers });
@@ -32,10 +32,10 @@ app.get('/api/data', async (req, res) => {
     res.end();
 });
 
+//Fetch Events From Profile API
 app.get('/api/events', async (req, res) => {
     let new_anon_id = (anon_id.replace(/['"]+/g, ''));
     let api_url = 'https://profiles.segment.com/v1/spaces/' + PersonasSpace + '/collections/users/profiles/anonymous_id:' + new_anon_id + '/events?limit=10';
-    //console.log("API URL -- ", api_url);
     var hash = btoa(profileApiToken + ':');
     const headers = {
         'Authorization': 'Basic ' + hash,
@@ -45,12 +45,7 @@ app.get('/api/events', async (req, res) => {
     try {
         const response = await axios.get(api_url, { headers });
         const responseData = response.data;
-        //console.log("Response Data -- ", responseData.data);
         res.json(responseData.data);
-
-        /* GET EVENT NAMES FROM RESPONSE DATA
-        const eventNames = responseData.data.map(record => record.event);
-        console.log("Event Names:", eventNames); */
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred while trying to fetch data' });
